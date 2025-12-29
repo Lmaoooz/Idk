@@ -632,18 +632,6 @@ do
     AutoNextPortalToggle:OnChanged(function()
         autoNextPortalEnabled = Options.AutoNextPortal.Value
         
-        -- Check if not in the restricted place
-        local placeId = tostring(game.PlaceId)
-        if placeId == "107573139811370" then
-            Fluent:Notify({
-                Title = "Not Available",
-                Content = "Auto Next Portal is disabled in this place",
-                Duration = 3
-            })
-            Options.AutoNextPortal:SetValue(false)
-            return
-        end
-        
         if autoNextPortalEnabled then
             if not selectedPortal then
                 Fluent:Notify({
