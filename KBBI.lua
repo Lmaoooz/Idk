@@ -507,3 +507,5 @@ end
 textBox:GetPropertyChangedSignal("Text"):Connect(function()
 	showWords(textBox.Text)
 end)
+
+-- Pat1
