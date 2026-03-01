@@ -289,7 +289,7 @@ local dict = {
 	z = {
 		"zahid","zakat","zalim","zaman","zamrud","zat","ziarah","zona","zonasi","zuhud",
 	},
-	bonus = {
+	watt = {
 		    "megawatt","mikrowatt","kilowatt","picowatt","pikowatt","gigawatt",
 	},
 }
