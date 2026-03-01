@@ -267,9 +267,7 @@ local dict = {
 	},
 	u = {
 		"ubah","uban","udara","uji","ujung","ular","ulang","ulur","umum","umur","unik","universal",
-		"untuk","upah","uang","urut","usaha","usai","utama","utang","utara","utas","utuh",
-		-- UKA words
-		"ukas",
+		"untuk","upah","uang","urut","usaha","usai","utama","utang","utara","utas","utuh","ukas","uhud","uhuk","uhu",
 	},
 	v = {
 		"vaksin","vaksinasi","valid","validitas","variasi","varietas","vektor","verbal","vibran","viral",
@@ -291,6 +289,8 @@ local dict = {
 	z = {
 		"zahid","zakat","zalim","zaman","zamrud","zat","ziarah","zona","zonasi","zuhud",
 	},
+	bonus = {
+		    "megawatt","mikrowatt","kilowatt","picowatt","pikowatt","gigawatt",
 }
 
 -- Gui
