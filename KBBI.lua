@@ -1,13 +1,8 @@
--- LocalScript: Place inside StarterPlayerScripts or StarterGui
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- ╔══════════════════════════════════════════════╗
--- ║         INDONESIAN WORD DICTIONARY           ║
--- ║     Organized by first letter for speed      ║
--- ╚══════════════════════════════════════════════╝
 local dict = {
 	a = {
 		"aba","abad","abadi","abah","abai","abang","abar","abas","abdomen","abdi","aberasi",
@@ -150,8 +145,8 @@ local dict = {
 	},
 	i = {
 		"ibadah","ibu","icak","ideal",
-		-- IF words
-		"ifah","ifrit","iftar","iftitah","identitas","idola","idrak","ikhlas","ikhtiar","ikhtisar","iklan",
+
+"ifah","ifrit","iftar","iftitah","ifra","ifrikiyah","identitas","idola","idrak","ikhlas","ikhtiar","ikhtisar","iklan",
 		"iklim","ikut","ilahi","ilmu","ilmuwan","ilustrasi","imajinasi","iman","imanen","imbal","imbang",
 		"imbas","imigrasi","imitasi","impak","impas","impor","improvisasi","imun","imunisasi","incar",
 		"indah","induk","induksi","industri","infak","inflasi","informasi","ingin","ingat","ingkar","ini",
@@ -172,7 +167,7 @@ local dict = {
 		"jumpa","juni","junior","junjung","jurus","justru","juta","jutawan",
 	},
 	k = {
-		"kaabah","kabar","kabaret","kabel","kabinet","kabul","kabupaten","kabur","kabut","kaca","kacang",
+		"knalpot","kaabah","kabar","kabaret","kabel","kabinet","kabul","kabupaten","kabur","kabut","kaca","kacang",
 		"kacau","kadang","kadar","kader","kadmium","kafir","kagum","kaidah","kain","kaisar","kait","kajang",
 		"kajian","kaji","kakak","kaki","kaktus","kaku","kala","kalah","kalam","kalang","kalap","kalaupun",
 		"kali","kalimat","kalori","kalung","kambing","kamar","kami","kamis","kampung","kampus","kamu",
@@ -236,7 +231,7 @@ local dict = {
 		"ngunyah","ngupil","nguras","ngurung","ngusil","ngusir","ngutak",
 	},
 	o = {
-		"obat","objek","objektif","obligasi","observasi","obsesi","olahraga","olah","oleh","operasi",
+		"oseng","ospek","osilasi","osilator","osarium","obat","objek","objektif","obligasi","observasi","obsesi","olahraga","olah","oleh","operasi",
 		"opini","organisasi","orang","orator","orbit","orde","organ","organik","ornamen",
 	},
 	p = {
@@ -298,11 +293,9 @@ local dict = {
 	},
 }
 
--- ╔══════════════════════════════════════════════╗
--- ║                   GUI SETUP                  ║
--- ╚══════════════════════════════════════════════╝
+-- Gui
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "IndonesianWordFinder"
+screenGui.Name = "WF-V1"
 screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = playerGui
@@ -325,7 +318,7 @@ dragBar.BackgroundColor3 = Color3.fromRGB(40, 80, 200)
 dragBar.TextColor3 = Color3.new(1,1,1)
 dragBar.Font = Enum.Font.GothamBold
 dragBar.TextSize = 13
-dragBar.Text = "🇮🇩  Indonesian Word Finder  ·  Drag"
+dragBar.Text = "Indo Words Finder - By WnZ"
 dragBar.BorderSizePixel = 0
 dragBar.Parent = searchFrame
 Instance.new("UICorner", dragBar).CornerRadius = UDim.new(0, 10)
@@ -335,7 +328,7 @@ textBox.Size = UDim2.new(1, -16, 0, 28)
 textBox.Position = UDim2.new(0, 8, 0, 30)
 textBox.BackgroundColor3 = Color3.fromRGB(45, 45, 65)
 textBox.TextColor3 = Color3.new(1,1,1)
-textBox.PlaceholderText = "Ketik kata... (contoh: mak)"
+textBox.PlaceholderText = "Ketik kata..."
 textBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
 textBox.Font = Enum.Font.GothamBold
 textBox.TextSize = 15
@@ -376,7 +369,7 @@ closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 closeBtn.TextColor3 = Color3.new(1,1,1)
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.TextSize = 14
-closeBtn.Text = "✕"
+closeBtn.Text = "-"
 closeBtn.BorderSizePixel = 0
 closeBtn.Parent = resultFrame
 Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
@@ -390,7 +383,7 @@ reopenBtn.BackgroundColor3 = Color3.fromRGB(40, 140, 80)
 reopenBtn.TextColor3 = Color3.new(1,1,1)
 reopenBtn.Font = Enum.Font.GothamBold
 reopenBtn.TextSize = 14
-reopenBtn.Text = "▼"
+reopenBtn.Text = "+"
 reopenBtn.BorderSizePixel = 0
 reopenBtn.Visible = false
 reopenBtn.Parent = searchFrame
@@ -425,9 +418,7 @@ local listPad = Instance.new("UIPadding", scrollFrame)
 listPad.PaddingTop = UDim.new(0, 4)
 listPad.PaddingLeft = UDim.new(0, 4)
 
--- ╔══════════════════════════════════════════════╗
--- ║                 DRAG LOGIC                   ║
--- ╚══════════════════════════════════════════════╝
+-- Drag UI
 local function makeDraggable(frame, handle)
 	local drag, dragStart, startPos = false, nil, nil
 	handle.InputBegan:Connect(function(i)
@@ -450,9 +441,7 @@ end
 makeDraggable(searchFrame, dragBar)
 makeDraggable(resultFrame, resultDragBar)
 
--- ╔══════════════════════════════════════════════╗
--- ║               SEARCH LOGIC                   ║
--- ╚══════════════════════════════════════════════╝
+-- Search
 local function clearWords()
 	for _, c in ipairs(scrollFrame:GetChildren()) do
 		if c:IsA("TextLabel") then c:Destroy() end
@@ -490,7 +479,7 @@ local function showWords(query)
 		lbl.TextColor3 = Color3.fromRGB(200,80,80)
 		lbl.Font = Enum.Font.Gotham
 		lbl.TextSize = 13
-		lbl.Text = "❌ Kata tidak ditemukan."
+		lbl.Text = "[Error] Kata tidak ditemukan."
 		lbl.TextXAlignment = Enum.TextXAlignment.Left
 		lbl.Parent = scrollFrame
 		return
