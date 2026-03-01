@@ -333,6 +333,7 @@ textBox.TextSize = 15
 textBox.ClearTextOnFocus = true
 textBox.BorderSizePixel = 0
 textBox.Parent = searchFrame
+textBox.text = "[Klik Disini Untuk Mencari]"
 Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 7)
 
 -- Result Frame
