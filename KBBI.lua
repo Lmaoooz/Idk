@@ -332,7 +332,7 @@ textBox.PlaceholderText = "Ketik kata..."
 textBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
 textBox.Font = Enum.Font.GothamBold
 textBox.TextSize = 15
-textBox.ClearTextOnFocus = false
+textBox.ClearTextOnFocus = true
 textBox.BorderSizePixel = 0
 textBox.Parent = searchFrame
 Instance.new("UICorner", textBox).CornerRadius = UDim.new(0, 7)
@@ -485,7 +485,7 @@ local function showWords(query)
 		return
 	end
 
-	resultDragBar.Text = "'" .. query .. "'  —  " .. #found .. " kata"
+	resultDragBar.Text = "'" .. query .. "'  —  " .. #found .. " kata ditemukan"
 	resultFrame.Visible = true
 
 	for i, word in ipairs(found) do
