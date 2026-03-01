@@ -118,7 +118,7 @@ local dict = {
 		"frasa","frustrasi","fundamental","fundamentalis","fungsi","fungsional",
 	},
 	g = {
-		"gabah","gabung","gabus","gadai","gadang","gadis","gado","gagah","gagal","gagap","gagas","gairah",
+		"gigawatt","gabah","gabung","gabus","gadai","gadang","gadis","gado","gagah","gagal","gagap","gagas","gairah",
 		"gajah","gaji","galak","galaksi","galah","galang","galau","galeri","gali","galih","galong","galur",
 		"gama","gamak","gamang","gambar","gambir","gamblang","gambus","gamelan","gamet","ganas","gancang",
 		"ganda","gandeng","gandrung","gandum","ganggu","ganja","ganjal","ganjil","ganteng","ganti","gantung",
@@ -167,7 +167,7 @@ local dict = {
 		"jumpa","juni","junior","junjung","jurus","justru","juta","jutawan",
 	},
 	k = {
-		"knalpot","kaabah","kabar","kabaret","kabel","kabinet","kabul","kabupaten","kabur","kabut","kaca","kacang",
+		"kilowatt","knalpot","kaabah","kabar","kabaret","kabel","kabinet","kabul","kabupaten","kabur","kabut","kaca","kacang",
 		"kacau","kadang","kadar","kader","kadmium","kafir","kagum","kaidah","kain","kaisar","kait","kajang",
 		"kajian","kaji","kakak","kaki","kaktus","kaku","kala","kalah","kalam","kalang","kalap","kalaupun",
 		"kali","kalimat","kalori","kalung","kambing","kamar","kami","kamis","kampung","kampus","kamu",
@@ -191,7 +191,7 @@ local dict = {
 		"luwes",
 	},
 	m = {
-		"maaf","mabuk","macam","macan","macet","madu","madya","maha","mahal","mahkamah","mahkota","mahasiswa",
+		"megawatt","microwatt","maaf","mabuk","macam","macan","macet","madu","madya","maha","mahal","mahkamah","mahkota","mahasiswa",
 		"mahir","majalah","majas","majikan","maju","makan","makin","makna","maklum","makna","malam","malang",
 		"malap","malaria","malas","malu","manah","manajemen","manajer","manakala","manfaat","mangan","mangga",
 		"mangkuk","mangsa","manja","manjur","mantan","mantap","mantra","manusia","manusiawi","marak","marah",
@@ -235,7 +235,7 @@ local dict = {
 		"opini","organisasi","orang","orator","orbit","orde","organ","organik","ornamen",
 	},
 	p = {
-		"pabrik","padat","pagi","pahala","paham","pahit","pahlawan","pakai","pakan","panas","panca",
+		"picowatt","pikowatt","pabrik","padat","pagi","pahala","paham","pahit","pahlawan","pakai","pakan","panas","panca",
 		"pancasila","pandai","pandang","pangan","pangeran","panggil","pangkat","panik","panjang","panti",
 		"pantun","paru","pasang","pasar","pasrah","pasti","patuh","patung","pecah","pedang","peduli",
 		"pelajar","pelawak","pelajaran","peluang","pencak","pendidikan","pengaruh","penguasa","perahu",
@@ -288,9 +288,6 @@ local dict = {
 	},
 	z = {
 		"zahid","zakat","zalim","zaman","zamrud","zat","ziarah","zona","zonasi","zuhud",
-	},
-	watt = {
-		    "megawatt","mikrowatt","kilowatt","picowatt","pikowatt","gigawatt",
 	},
 }
 
@@ -484,7 +481,7 @@ for _, bucket in pairs(dict) do
 		return
 	end
 
-	resultDragBar.Text = "'" .. query .. "'  —  " .. #found .. " kata ditemukan"
+	resultDragBar.Text = "'" .. query .. "' - " .. #found .. " Kata ditemukan"
 	resultFrame.Visible = true
 
 	for i, word in ipairs(found) do
@@ -508,4 +505,4 @@ textBox:GetPropertyChangedSignal("Text"):Connect(function()
 	showWords(textBox.Text)
 end)
 
--- Pat1
+-- Pat2
