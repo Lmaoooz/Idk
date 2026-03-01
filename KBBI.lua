@@ -316,7 +316,7 @@ dragBar.BackgroundColor3 = Color3.fromRGB(40, 80, 200)
 dragBar.TextColor3 = Color3.new(1,1,1)
 dragBar.Font = Enum.Font.GothamBold
 dragBar.TextSize = 13
-dragBar.Text = "Indo Words Finder - By WnZ"
+dragBar.Text = "Indo Words Finder - By WnZ [Beta Test]"
 dragBar.BorderSizePixel = 0
 dragBar.Parent = searchFrame
 Instance.new("UICorner", dragBar).CornerRadius = UDim.new(0, 10)
@@ -326,7 +326,7 @@ textBox.Size = UDim2.new(1, -16, 0, 28)
 textBox.Position = UDim2.new(0, 8, 0, 30)
 textBox.BackgroundColor3 = Color3.fromRGB(45, 45, 65)
 textBox.TextColor3 = Color3.new(1,1,1)
-textBox.PlaceholderText = "Ketik kata..."
+textBox.PlaceholderText = "Cari kata..."
 textBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
 textBox.Font = Enum.Font.GothamBold
 textBox.TextSize = 15
@@ -367,7 +367,7 @@ closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 closeBtn.TextColor3 = Color3.new(1,1,1)
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.TextSize = 14
-closeBtn.Text = "-"
+closeBtn.Text = "Tutup"
 closeBtn.BorderSizePixel = 0
 closeBtn.Parent = resultFrame
 Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
@@ -381,7 +381,7 @@ reopenBtn.BackgroundColor3 = Color3.fromRGB(40, 140, 80)
 reopenBtn.TextColor3 = Color3.new(1,1,1)
 reopenBtn.Font = Enum.Font.GothamBold
 reopenBtn.TextSize = 14
-reopenBtn.Text = "+"
+reopenBtn.Text = "Buka"
 reopenBtn.BorderSizePixel = 0
 reopenBtn.Visible = false
 reopenBtn.Parent = searchFrame
@@ -451,37 +451,39 @@ local function showWords(query)
 	query = query:lower()
 	if query == "" then resultFrame.Visible = false; return end
 
+	local firstLetter = query:sub(1, 1)
+	local bucket = dict[firstLetter]
 	local found = {}
-	local seen = {}
 
--- Cari kata yang MENGANDUNG query di mana saja
-for _, bucket in pairs(dict) do
-    for _, word in ipairs(bucket) do
-        if word:find(query, 1, true) and not seen[word] then
-            seen[word] = true
-            table.insert(found, word)
-        end
-    end
+	-- ONLY show words that START with the query
+	if bucket then
+		local seen = {}
+		for _, word in ipairs(bucket) do
+			if word:sub(1, #query) == query and not seen[word] then
+				seen[word] = true
+				table.insert(found, word)
+			end
+		end
 	end
 
 	table.sort(found, function(a, b) return a < b end)
 
 	if #found == 0 then
 		resultFrame.Visible = true
-		resultDragBar.Text = "Tidak ditemukan"
+		resultDragBar.Text = "[Search Failed]"
 		local lbl = Instance.new("TextLabel")
 		lbl.Size = UDim2.new(1,-8,0,28)
 		lbl.BackgroundTransparency = 1
 		lbl.TextColor3 = Color3.fromRGB(200,80,80)
 		lbl.Font = Enum.Font.Gotham
 		lbl.TextSize = 13
-		lbl.Text = "[Error] Kata tidak ditemukan."
+		lbl.Text = "[Error] Tidak Ada Kata Yang Cocok Ditemukan."
 		lbl.TextXAlignment = Enum.TextXAlignment.Left
 		lbl.Parent = scrollFrame
 		return
 	end
 
-	resultDragBar.Text = "'" .. query .. "' - " .. #found .. " Kata ditemukan"
+	resultDragBar.Text = "'" .. query .. "' - " .. #found .. " Kata Ditemukan"
 	resultFrame.Visible = true
 
 	for i, word in ipairs(found) do
@@ -505,4 +507,4 @@ textBox:GetPropertyChangedSignal("Text"):Connect(function()
 	showWords(textBox.Text)
 end)
 
--- Pat2
+-- Pat4
