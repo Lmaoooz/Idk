@@ -454,19 +454,17 @@ local function showWords(query)
 	query = query:lower()
 	if query == "" then resultFrame.Visible = false; return end
 
-	local firstLetter = query:sub(1, 1)
-	local bucket = dict[firstLetter]
 	local found = {}
+	local seen = {}
 
-	-- ONLY show words that START with the query
-	if bucket then
-		local seen = {}
-		for _, word in ipairs(bucket) do
-			if word:sub(1, #query) == query and not seen[word] then
-				seen[word] = true
-				table.insert(found, word)
-			end
-		end
+-- Cari kata yang MENGANDUNG query di mana saja
+for _, bucket in pairs(dict) do
+    for _, word in ipairs(bucket) do
+        if word:find(query, 1, true) and not seen[word] then
+            seen[word] = true
+            table.insert(found, word)
+        end
+    end
 	end
 
 	table.sort(found, function(a, b) return a < b end)
