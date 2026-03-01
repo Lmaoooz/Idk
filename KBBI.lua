@@ -291,6 +291,7 @@ local dict = {
 	},
 	bonus = {
 		    "megawatt","mikrowatt","kilowatt","picowatt","pikowatt","gigawatt",
+	},
 }
 
 -- Gui
