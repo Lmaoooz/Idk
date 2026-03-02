@@ -399,7 +399,48 @@ reopenBtn.MouseButton1Click:Connect(function()
 	reopenBtn.Visible = false
 end)
 
--- auto search
+local scrollFrame = Instance.new("ScrollingFrame")
+scrollFrame.Size = UDim2.new(1, -10, 1, -36)
+scrollFrame.Position = UDim2.new(0, 5, 0, 32)
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.BorderSizePixel = 0
+scrollFrame.ScrollBarThickness = 4
+scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(70, 120, 255)
+scrollFrame.CanvasSize = UDim2.new(0,0,0,0)
+scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+scrollFrame.Parent = resultFrame
+
+local listLayout = Instance.new("UIListLayout", scrollFrame)
+listLayout.Padding = UDim.new(0, 3)
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+local listPad = Instance.new("UIPadding", scrollFrame)
+listPad.PaddingTop = UDim.new(0, 4)
+listPad.PaddingLeft = UDim.new(0, 4)
+
+-- Drag UI
+local function makeDraggable(frame, handle)
+	local drag, dragStart, startPos = false, nil, nil
+	handle.InputBegan:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+			drag = true; dragStart = i.Position; startPos = frame.Position
+		end
+	end)
+	handle.InputEnded:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+			drag = false
+		end
+	end)
+	UserInputService.InputChanged:Connect(function(i)
+		if drag and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
+			local d = i.Position - dragStart
+			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+		end
+	end)
+end
+makeDraggable(searchFrame, dragBar)
+makeDraggable(resultFrame, resultDragBar)
+
+-- Auto Search
 local RunService = game:GetService("RunService")
 
 local autoFrame = Instance.new("Frame")
@@ -500,7 +541,6 @@ local function fillAutoSearch(query)
 	end
 end
 
--- Bb check
 local lastText = ""
 
 RunService.Heartbeat:Connect(function()
@@ -520,47 +560,6 @@ RunService.Heartbeat:Connect(function()
 		fillAutoSearch(currentText)
 	end
 end)
-
-local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -10, 1, -36)
-scrollFrame.Position = UDim2.new(0, 5, 0, 32)
-scrollFrame.BackgroundTransparency = 1
-scrollFrame.BorderSizePixel = 0
-scrollFrame.ScrollBarThickness = 4
-scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(70, 120, 255)
-scrollFrame.CanvasSize = UDim2.new(0,0,0,0)
-scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-scrollFrame.Parent = resultFrame
-
-local listLayout = Instance.new("UIListLayout", scrollFrame)
-listLayout.Padding = UDim.new(0, 3)
-listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-local listPad = Instance.new("UIPadding", scrollFrame)
-listPad.PaddingTop = UDim.new(0, 4)
-listPad.PaddingLeft = UDim.new(0, 4)
-
--- Drag UI
-local function makeDraggable(frame, handle)
-	local drag, dragStart, startPos = false, nil, nil
-	handle.InputBegan:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			drag = true; dragStart = i.Position; startPos = frame.Position
-		end
-	end)
-	handle.InputEnded:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			drag = false
-		end
-	end)
-	UserInputService.InputChanged:Connect(function(i)
-		if drag and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
-			local d = i.Position - dragStart
-			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
-		end
-	end)
-end
-makeDraggable(searchFrame, dragBar)
-makeDraggable(resultFrame, resultDragBar)
 
 -- Search
 local function clearWords()
