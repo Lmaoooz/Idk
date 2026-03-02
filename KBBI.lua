@@ -399,6 +399,130 @@ reopenBtn.MouseButton1Click:Connect(function()
 	reopenBtn.Visible = false
 end)
 
+-- auto search
+local RunService = game:GetService("RunService")
+
+-- Frame landscape untuk auto search
+local autoFrame = Instance.new("Frame")
+autoFrame.Size = UDim2.new(0, 500, 0, 130)
+autoFrame.Position = UDim2.new(0.5, -250, 1, -145)
+autoFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 28)
+autoFrame.BorderSizePixel = 0
+autoFrame.Active = true
+autoFrame.Visible = false
+autoFrame.Parent = screenGui
+Instance.new("UICorner", autoFrame).CornerRadius = UDim.new(0, 10)
+local autoStroke = Instance.new("UIStroke", autoFrame)
+autoStroke.Color = Color3.fromRGB(255, 160, 30)
+autoStroke.Thickness = 1.5
+
+-- Title bar auto
+local autoBar = Instance.new("TextLabel")
+autoBar.Size = UDim2.new(1, 0, 0, 24)
+autoBar.BackgroundColor3 = Color3.fromRGB(180, 100, 20)
+autoBar.TextColor3 = Color3.new(1,1,1)
+autoBar.Font = Enum.Font.GothamBold
+autoBar.TextSize = 12
+autoBar.Text = "🔍 Auto Search"
+autoBar.BorderSizePixel = 0
+autoBar.Parent = autoFrame
+Instance.new("UICorner", autoBar).CornerRadius = UDim.new(0, 10)
+
+-- ScrollingFrame horizontal untuk auto search
+local autoScroll = Instance.new("ScrollingFrame")
+autoScroll.Size = UDim2.new(1, -10, 1, -30)
+autoScroll.Position = UDim2.new(0, 5, 0, 26)
+autoScroll.BackgroundTransparency = 1
+autoScroll.BorderSizePixel = 0
+autoScroll.ScrollBarThickness = 4
+autoScroll.ScrollBarImageColor3 = Color3.fromRGB(255, 160, 30)
+autoScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+autoScroll.AutomaticCanvasSize = Enum.AutomaticSize.X
+autoScroll.ScrollingDirection = Enum.ScrollingDirection.X
+autoScroll.Parent = autoFrame
+
+local autoLayout = Instance.new("UIListLayout", autoScroll)
+autoLayout.FillDirection = Enum.FillDirection.Horizontal
+autoLayout.Padding = UDim.new(0, 5)
+autoLayout.SortOrder = Enum.SortOrder.LayoutOrder
+local autoPad = Instance.new("UIPadding", autoScroll)
+autoPad.PaddingLeft = UDim.new(0, 4)
+autoPad.PaddingTop = UDim.new(0, 4)
+
+-- Fungsi isi auto search
+local function fillAutoSearch(query)
+	-- Hapus hasil lama
+	for _, c in ipairs(autoScroll:GetChildren()) do
+		if c:IsA("TextLabel") then c:Destroy() end
+	end
+
+	if query == "" then
+		autoFrame.Visible = false
+		return
+	end
+
+	query = query:lower()
+	local found = {}
+	local seen = {}
+
+	-- Cari kata yang DIAWALI dengan query
+	for _, bucket in pairs(dict) do
+		for _, word in ipairs(bucket) do
+			if word:sub(1, #query) == query and not seen[word] then
+				seen[word] = true
+				table.insert(found, word)
+			end
+		end
+	end
+
+	table.sort(found, function(a, b) return a < b end)
+
+	if #found == 0 then
+		autoFrame.Visible = false
+		return
+	end
+
+	autoBar.Text = "🔍 Auto: \"" .. query:upper() .. "\"  —  " .. #found .. " kata"
+	autoFrame.Visible = true
+
+	for i, word in ipairs(found) do
+		local lbl = Instance.new("TextLabel")
+		lbl.Size = UDim2.new(0, math.max(70, #word * 9), 1, -8)
+		lbl.BackgroundColor3 = Color3.fromRGB(40, 30, 15)
+		lbl.TextColor3 = Color3.fromRGB(255, 210, 120)
+		lbl.Font = Enum.Font.GothamBold
+		lbl.TextSize = 13
+		lbl.Text = word:sub(1,1):upper() .. word:sub(2)
+		lbl.BorderSizePixel = 0
+		lbl.LayoutOrder = i
+		lbl.Parent = autoScroll
+		Instance.new("UICorner", lbl).CornerRadius = UDim.new(0, 6)
+	end
+end
+
+-- BB CHECK
+local lastText = ""
+
+RunService.Heartbeat:Connect(function()
+	local success, result = pcall(function()
+		local head = player.Character and player.Character:FindFirstChild("Head")
+		if not head then return "" end
+		local billboard = head:FindFirstChild("TurnBillboard")
+		if not billboard then return "" end
+		local textLabel = billboard:FindFirstChildWhichIsA("TextLabel")
+		if not textLabel then return "" end
+		return textLabel.Text
+	end)
+
+	local currentText = (success and result) or ""
+
+	-- Hanya update jika text berubah
+	if currentText ~= lastText then
+		lastText = currentText
+		fillAutoSearch(currentText)
+	end
+end)
+
 local scrollFrame = Instance.new("ScrollingFrame")
 scrollFrame.Size = UDim2.new(1, -10, 1, -36)
 scrollFrame.Position = UDim2.new(0, 5, 0, 32)
