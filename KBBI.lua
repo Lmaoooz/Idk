@@ -402,10 +402,9 @@ end)
 -- auto search
 local RunService = game:GetService("RunService")
 
--- Frame landscape untuk auto search
 local autoFrame = Instance.new("Frame")
-autoFrame.Size = UDim2.new(0, 500, 0, 130)
-autoFrame.Position = UDim2.new(0.5, -250, 1, -145)
+autoFrame.Size = UDim2.new(0, 340, 0, 90)
+autoFrame.Position = UDim2.new(0, 40, 0, 120)
 autoFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 28)
 autoFrame.BorderSizePixel = 0
 autoFrame.Active = true
@@ -416,25 +415,23 @@ local autoStroke = Instance.new("UIStroke", autoFrame)
 autoStroke.Color = Color3.fromRGB(255, 160, 30)
 autoStroke.Thickness = 1.5
 
--- Title bar auto
 local autoBar = Instance.new("TextLabel")
-autoBar.Size = UDim2.new(1, 0, 0, 24)
-autoBar.BackgroundColor3 = Color3.fromRGB(180, 100, 20)
-autoBar.TextColor3 = Color3.new(1,1,1)
+autoBar.Size = UDim2.new(1, 0, 0, 22)
+autoBar.BackgroundColor3 = Color3.fromRGB(160, 85, 10)
+autoBar.TextColor3 = Color3.new(1, 1, 1)
 autoBar.Font = Enum.Font.GothamBold
-autoBar.TextSize = 12
+autoBar.TextSize = 11
 autoBar.Text = "🔍 Auto Search"
 autoBar.BorderSizePixel = 0
 autoBar.Parent = autoFrame
 Instance.new("UICorner", autoBar).CornerRadius = UDim.new(0, 10)
 
--- ScrollingFrame horizontal untuk auto search
 local autoScroll = Instance.new("ScrollingFrame")
-autoScroll.Size = UDim2.new(1, -10, 1, -30)
-autoScroll.Position = UDim2.new(0, 5, 0, 26)
+autoScroll.Size = UDim2.new(1, -8, 1, -28)
+autoScroll.Position = UDim2.new(0, 4, 0, 24)
 autoScroll.BackgroundTransparency = 1
 autoScroll.BorderSizePixel = 0
-autoScroll.ScrollBarThickness = 4
+autoScroll.ScrollBarThickness = 3
 autoScroll.ScrollBarImageColor3 = Color3.fromRGB(255, 160, 30)
 autoScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 autoScroll.AutomaticCanvasSize = Enum.AutomaticSize.X
@@ -443,15 +440,16 @@ autoScroll.Parent = autoFrame
 
 local autoLayout = Instance.new("UIListLayout", autoScroll)
 autoLayout.FillDirection = Enum.FillDirection.Horizontal
-autoLayout.Padding = UDim.new(0, 5)
+autoLayout.Padding = UDim.new(0, 4)
 autoLayout.SortOrder = Enum.SortOrder.LayoutOrder
 local autoPad = Instance.new("UIPadding", autoScroll)
-autoPad.PaddingLeft = UDim.new(0, 4)
-autoPad.PaddingTop = UDim.new(0, 4)
+autoPad.PaddingLeft = UDim.new(0, 3)
+autoPad.PaddingTop = UDim.new(0, 3)
+autoPad.PaddingBottom = UDim.new(0, 3)
 
--- Fungsi isi auto search
+makeDraggable(autoFrame, autoBar)
+
 local function fillAutoSearch(query)
-	-- Hapus hasil lama
 	for _, c in ipairs(autoScroll:GetChildren()) do
 		if c:IsA("TextLabel") then c:Destroy() end
 	end
@@ -465,7 +463,6 @@ local function fillAutoSearch(query)
 	local found = {}
 	local seen = {}
 
-	-- Cari kata yang DIAWALI dengan query
 	for _, bucket in pairs(dict) do
 		for _, word in ipairs(bucket) do
 			if word:sub(1, #query) == query and not seen[word] then
@@ -482,25 +479,28 @@ local function fillAutoSearch(query)
 		return
 	end
 
-	autoBar.Text = "🔍 Auto: \"" .. query:upper() .. "\"  —  " .. #found .. " kata"
+	autoBar.Text = "🔍 \"" .. query:upper() .. "\"  -  " .. #found .. " kata"
 	autoFrame.Visible = true
 
 	for i, word in ipairs(found) do
+		local display = word:sub(1,1):upper() .. word:sub(2)
 		local lbl = Instance.new("TextLabel")
-		lbl.Size = UDim2.new(0, math.max(70, #word * 9), 1, -8)
-		lbl.BackgroundColor3 = Color3.fromRGB(40, 30, 15)
+		lbl.Size = UDim2.new(0, #display * 8 + 12, 1, 0)
+		lbl.BackgroundColor3 = Color3.fromRGB(50, 35, 10)
 		lbl.TextColor3 = Color3.fromRGB(255, 210, 120)
-		lbl.Font = Enum.Font.GothamBold
-		lbl.TextSize = 13
-		lbl.Text = word:sub(1,1):upper() .. word:sub(2)
+		lbl.Font = Enum.Font.Gotham
+		lbl.TextSize = 12
+		lbl.Text = display
+		lbl.TextXAlignment = Enum.TextXAlignment.Center
+		lbl.TextTruncate = Enum.TextTruncate.None
 		lbl.BorderSizePixel = 0
 		lbl.LayoutOrder = i
 		lbl.Parent = autoScroll
-		Instance.new("UICorner", lbl).CornerRadius = UDim.new(0, 6)
+		Instance.new("UICorner", lbl).CornerRadius = UDim.new(0, 5)
 	end
 end
 
--- BB CHECK
+-- Bb check
 local lastText = ""
 
 RunService.Heartbeat:Connect(function()
@@ -515,8 +515,6 @@ RunService.Heartbeat:Connect(function()
 	end)
 
 	local currentText = (success and result) or ""
-
-	-- Hanya update jika text berubah
 	if currentText ~= lastText then
 		lastText = currentText
 		fillAutoSearch(currentText)
@@ -632,4 +630,4 @@ textBox:GetPropertyChangedSignal("Text"):Connect(function()
 	showWords(textBox.Text)
 end)
 
--- Pat5
+-- Pat6
